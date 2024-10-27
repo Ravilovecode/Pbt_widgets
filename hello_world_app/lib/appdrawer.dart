@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hello_world_app/faqpage.dart';
 
 class AppDrawer extends StatelessWidget {
   @override
@@ -102,6 +103,12 @@ class AppDrawer extends StatelessWidget {
             leading: Icon(Icons.help_outline),
             title: Text('Help'),
             minLeadingWidth: 20,
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => FAQPage()),
+              );
+            },
           ),
           Padding(
             padding: const EdgeInsets.all(16.0),

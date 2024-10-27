@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hello_world_app/appdrawer.dart';
 import 'package:hello_world_app/downloadpage.dart';
 import 'package:hello_world_app/mylib.dart';
+import 'package:hello_world_app/pbtclasspage.dart';
 import 'package:hello_world_app/search.dart';
 
 class HomePage extends StatefulWidget {
@@ -133,7 +134,7 @@ class HomeContent extends StatelessWidget {
           ),
           SizedBox(height: 10),
 
-          Text(
+         Text(
             'PBT Classes',
             style: TextStyle(
               fontSize: 24,
@@ -143,31 +144,57 @@ class HomeContent extends StatelessWidget {
           ),
           SizedBox(height: 10),
 
+          // Navigate to PBTClassesPage on tap
           SizedBox(
             height: 200,
             child: ListView(
               scrollDirection: Axis.horizontal,
               children: [
-                PBTClassCard(
-                  title: 'Sub Junior',
-                  ageRange: '6-8 years',
-                  image: 'assets/home/sub_juniour.jpeg',
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => PBTClassesPage()),
+                    );
+                  },
+                  child: PBTClassCard(
+                    title: 'Sub Junior',
+                    ageRange: '6-8 years',
+                    image: 'assets/home/sub_juniour.jpeg',
+                  ),
                 ),
                 SizedBox(width: 16),
-                PBTClassCard(
-                  title: 'Junior',
-                  ageRange: '9-11 years',
-                  image: 'assets/home/juniour.jpeg',
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => PBTClassesPage()),
+                    );
+                  },
+                  child: PBTClassCard(
+                    title: 'Junior',
+                    ageRange: '9-11 years',
+                    image: 'assets/home/juniour.jpeg',
+                  ),
                 ),
                 SizedBox(width: 16),
-                PBTClassCard(
-                  title: 'Senior',
-                  ageRange: '12-15 years',
-                  image: 'assets/home/senior.jpeg',
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => PBTClassesPage()),
+                    );
+                  },
+                  child: PBTClassCard(
+                    title: 'Senior',
+                    ageRange: '12-15 years',
+                    image: 'assets/home/senior.jpeg',
+                  ),
                 ),
               ],
             ),
           ),
+      
           SizedBox(height: 10),
 
           // Top 20 Tracks section
