@@ -1,9 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:hello_world_app/pbtloginPage.dart';
+import 'package:hello_world_app/auth_provider.dart';
+import 'package:hello_world_app/homepage.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(MyApp());
+  
+  // Create auth provider instance early to check login status
+  final authProvider = AuthProvider();
+  await authProvider.checkLoginStatus();
+  
+  runApp(
+    ChangeNotifierProvider.value(
+      value: authProvider,
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -14,9 +27,16 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.pink,
       ),
-      home: LoginPage(),
+      // Use Consumer to watch auth state
+      home: Consumer<AuthProvider>(
+        builder: (context, auth, _) {
+          // Redirect to HomePage if already logged in
+          return auth.isLoggedIn ? HomePage() : Pbtloginpage();
+        },
+      ),
       routes: {
-        '/pbtLogin': (context) => Pbtloginpage(),
+        '/login': (context) => Pbtloginpage(),
+        '/home': (context) => HomePage(),
       },
     );
   }

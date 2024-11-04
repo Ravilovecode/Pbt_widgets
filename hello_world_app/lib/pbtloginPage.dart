@@ -1,8 +1,55 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:hello_world_app/homepage.dart';
+import 'auth_provider.dart';
 
-class Pbtloginpage extends StatelessWidget {
+class Pbtloginpage extends StatefulWidget {
   const Pbtloginpage({super.key});
+
+  @override
+  State<Pbtloginpage> createState() => _PbtloginpageState();
+}
+
+class _PbtloginpageState extends State<Pbtloginpage> {
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  bool _isLoading = false;
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _handleLogin() async {
+    if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please fill in all fields')),
+      );
+      return;
+    }
+
+    setState(() => _isLoading = true);
+
+    try {
+      final result = await Provider.of<AuthProvider>(context, listen: false)
+          .login(_emailController.text, _passwordController.text);
+
+      if (result['success']) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => HomePage()),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(result['message'])),
+        );
+      }
+    } finally {
+      setState(() => _isLoading = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -12,17 +59,15 @@ class Pbtloginpage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            SizedBox(height: 20), // Top margin space
-            // Image at the top
+            SizedBox(height: 20),
             Center(
               child: Image.asset(
-                'assets/login.jpeg', // Replace with your image path
-                height: 470, // Adjust as necessary
+                'assets/login.jpeg',
+                height: MediaQuery.of(context).size.height * 0.20,
+                fit: BoxFit.contain,
               ),
             ),
             SizedBox(height: 20),
-
-            // Description text
             Text(
               'Log in using the same credentials you use for the PBT website',
               style: TextStyle(
@@ -32,9 +77,8 @@ class Pbtloginpage extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             SizedBox(height: 30),
-
-            // Email Input Field
             TextField(
+              controller: _emailController,
               decoration: InputDecoration(
                 labelText: 'Email',
                 prefixIcon: Icon(Icons.email),
@@ -44,10 +88,9 @@ class Pbtloginpage extends StatelessWidget {
               ),
             ),
             SizedBox(height: 15),
-
-            // Password Input Field
             TextField(
-              obscureText: true, // Hide the password text
+              controller: _passwordController,
+              obscureText: true,
               decoration: InputDecoration(
                 labelText: 'Enter your password',
                 prefixIcon: Icon(Icons.lock),
@@ -57,36 +100,26 @@ class Pbtloginpage extends StatelessWidget {
               ),
             ),
             SizedBox(height: 20),
-
-            // Login Button
-            // Login Button
             ElevatedButton(
-              onPressed: () {
-                // Navigate to the HomePage after login
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => HomePage()),
-                );
-              },
+              onPressed: _isLoading ? null : _handleLogin,
               style: ElevatedButton.styleFrom(
                 padding: EdgeInsets.symmetric(vertical: 16),
-                backgroundColor: Colors.pink, // Primary button color
+                backgroundColor: Colors.pink,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
-              child: Text(
-                'Log in',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.white,
-                ),
-              ),
+              child: _isLoading
+                  ? CircularProgressIndicator(color: Colors.white)
+                  : Text(
+                      'Log in',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.white,
+                      ),
+                    ),
             ),
-
             SizedBox(height: 10),
-
-            // Forgot password link
             Align(
               alignment: Alignment.centerRight,
               child: TextButton(

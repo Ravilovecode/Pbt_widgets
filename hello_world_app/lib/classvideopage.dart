@@ -29,8 +29,8 @@ class _ClassVideoPageState extends State<ClassVideoPage> {
         _errorMessage = null;
       });
 
-      _videoPlayerController = VideoPlayerController.network(
-        'https://firebasestorage.googleapis.com/v0/b/flutterapitest12122002.appspot.com/o/videos%2FWhatsApp%20Video%202024-09-07%20at%207.41.59%20AM.mp4?alt=media&token=190d81ed-5bab-43fe-8409-e3fc97a54af5',
+      _videoPlayerController = VideoPlayerController.networkUrl(
+        Uri.parse('https://firebasestorage.googleapis.com/v0/b/flutterapitest12122002.appspot.com/o/videos%2Fpbt.mp4?alt=media&token=86d03887-b2ef-4309-b1c3-d87c6f45c61f'),
       );
 
       await _videoPlayerController!.initialize();
